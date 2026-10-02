@@ -8,4 +8,8 @@ public interface NoticiaRepository extends JpaRepository<Noticia, Long> {
 
     // Lista as notícias da mais nova para a mais antiga
     List<Noticia> findAllByOrderByDataPublicacaoDesc();
+
+    // As 5 mais recentes, menos a notícia com esse id (o LIMIT 5 é feito no banco)
+    List<Noticia> findTop5ByIdNotOrderByDataPublicacaoDesc(Long id);
+
 }

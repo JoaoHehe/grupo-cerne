@@ -68,7 +68,7 @@
             </a>
 
             <a th:href="@{/login}">
-                Área restrita
+                Área admnistrativa
             </a>
 
         </nav>
@@ -87,125 +87,170 @@
 
     <div class="news-detail-inner">
 
+        <div class="noticia-layout">
 
-        <!-- VOLTAR -->
+            <!-- NOTÍCIA PRINCIPAL -->
 
-        <a
-                class="news-back"
-                th:href="@{/}"
-        >
-            ← Voltar para as notícias
-        </a>
+            <article class="noticia-principal">
 
+                <!-- VOLTAR -->
 
-        <!-- CABEÇALHO DA NOTÍCIA -->
-
-        <header class="news-detail-header">
-
-            <span class="eyebrow">
-                Grupo Teatral Cerne
-            </span>
-
-
-            <h1
-                    th:text="${noticia.titulo}"
-            >
-                Título da notícia
-            </h1>
-
-
-            <div class="news-detail-meta">
-
-                <span>
-                    Publicado em
-                </span>
-
-                <time
-                        th:text="${#temporals.format(noticia.dataPublicacao, 'dd/MM/yyyy HH:mm')}"
+                <a
+                        class="news-back"
+                        th:href="@{/}"
                 >
-                    01/10/2026 12:00
-                </time>
-
-            </div>
-
-        </header>
+                    ← Voltar para as notícias
+                </a>
 
 
+                <!-- CABEÇALHO DA NOTÍCIA -->
 
-        <!-- =================================================
-             GALERIA DE IMAGENS
-             ================================================= -->
+                <header class="news-detail-header">
 
-        <div
-                class="news-gallery"
-                th:if="${noticia.imagens != null and !noticia.imagens.isEmpty()}"
-        >
+                    <span class="eyebrow">
+                        Grupo Teatral Cerne
+                    </span>
 
-            <figure
-                    class="news-gallery-item"
-                    th:each="img : ${noticia.imagens}"
-            >
 
-                <img
-                        th:src="@{/uploads/{arquivo}(arquivo=${img.arquivo})}"
-                        th:alt="${noticia.titulo}"
+                    <h1
+                            th:text="${noticia.titulo}"
+                    >
+                        Título da notícia
+                    </h1>
+
+
+                    <div class="news-detail-meta">
+
+                        <span>
+                            Publicado em
+                        </span>
+
+                        <time
+                                th:text="${#temporals.format(noticia.dataPublicacao, 'dd/MM/yyyy HH:mm')}"
+                        >
+                            01/10/2026 12:00
+                        </time>
+
+                    </div>
+
+                </header>
+
+
+
+                <!-- =================================================
+                     GALERIA DE IMAGENS
+                     ================================================= -->
+
+                <div
+                        class="news-gallery"
+                        th:if="${noticia.imagens != null and !noticia.imagens.isEmpty()}"
                 >
 
-            </figure>
+                    <figure
+                            class="news-gallery-item"
+                            th:each="img : ${noticia.imagens}"
+                    >
 
-        </div>
+                        <img
+                                th:src="@{/uploads/{arquivo}(arquivo=${img.arquivo})}"
+                                th:alt="${noticia.titulo}"
+                        >
 
+                    </figure>
 
-
-        <!-- =================================================
-             VÍDEO
-             ================================================= -->
-
-        <div
-                class="news-video"
-                th:if="${noticia.video != null}"
-        >
-
-            <video
-                    th:src="@{/uploads/{arquivo}(arquivo=${noticia.video})}"
-                    controls
-            ></video>
-
-        </div>
+                </div>
 
 
 
-        <!-- =================================================
-             CONTEÚDO
-             ================================================= -->
+                <!-- =================================================
+                     VÍDEO
+                     ================================================= -->
 
-        <article class="news-detail-content">
+                <div
+                        class="news-video"
+                        th:if="${noticia.video != null}"
+                >
 
-            <p
-                    th:text="${noticia.conteudo}"
+                    <video
+                            th:src="@{/uploads/{arquivo}(arquivo=${noticia.video})}"
+                            controls
+                    ></video>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CONTEÚDO
+                     ================================================= -->
+
+                <article class="news-detail-content">
+
+                    <p
+                            th:text="${noticia.conteudo}"
+                    >
+                        Conteúdo da notícia
+                    </p>
+
+                </article>
+
+
+
+                <!-- =================================================
+                     FINAL
+                     ================================================= -->
+
+                <div class="news-detail-footer">
+
+                    <span>
+                        Grupo Teatral Cerne
+                    </span>
+
+                    <a
+                            th:href="@{/}"
+                    >
+                        Ver outras notícias →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- NOTÍCIAS RECENTES -->
+
+            <!-- Some sozinho se não houver outras notícias -->
+            <aside
+                    class="noticias-recentes"
+                    th:if="${!#lists.isEmpty(recentes)}"
             >
-                Conteúdo da notícia
-            </p>
 
-        </article>
+                <h2>
+                    Notícias recentes
+                </h2>
 
+                <ul>
 
+                    <li th:each="r : ${recentes}">
 
-        <!-- =================================================
-             FINAL
-             ================================================= -->
+                        <a
+                                th:href="@{/noticia/{id}(id=${r.id})}"
+                                th:text="${r.titulo}"
+                        >
+                            Título
+                        </a>
 
-        <div class="news-detail-footer">
+                        <small
+                                th:text="${#temporals.format(r.dataPublicacao, 'dd/MM/yyyy')}"
+                        >
+                            data
+                        </small>
 
-            <span>
-                Grupo Teatral Cerne
-            </span>
+                    </li>
 
-            <a
-                    th:href="@{/}"
-            >
-                Ver outras notícias →
-            </a>
+                </ul>
+
+            </aside>
 
         </div>
 

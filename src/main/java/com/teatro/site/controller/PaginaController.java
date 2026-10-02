@@ -28,12 +28,16 @@ public class PaginaController {
     public String login() {
         return "login";
     }
+
     // Página de uma notícia, aberta para qualquer pessoa
     @GetMapping("/noticia/{id}")
     public String noticia(@PathVariable Long id, Model model) {
         Noticia noticia = noticiaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("noticia", noticia);
+
+        // Barra lateral: 5 mais recentes, sem a que está aberta
+        model.addAttribute("recentes", noticiaRepository.findTop5ByIdNotOrderByDataPublicacaoDesc(id));
         return "noticia";
     }
 }
