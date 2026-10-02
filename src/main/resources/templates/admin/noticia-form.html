@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${noticia.id == null} ? 'Nova notícia | Grupo Teatral Cerne' : 'Editar notícia | Grupo Teatral Cerne'">
+        Notícia | Grupo Teatral Cerne
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="admin-page">
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a class="brand" th:href="@{/}">
+            <img th:src="@{/css/img/logoCerne.png}"
+                 alt="Grupo Teatral Cerne">
+
+            <span class="brand-text">
+                <strong>Grupo Teatral Cerne</strong>
+                <span>Teatro &amp; Cultura</span>
+            </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navegação principal">
+
+            <a th:href="@{/admin/noticias}">
+                Painel
+            </a>
+
+            <a th:href="@{/}">
+                Ver site
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main class="admin-form-main">
+
+    <div class="admin-form-container">
+
+        <!-- VOLTAR -->
+
+        <a class="admin-form-back"
+           th:href="@{/admin/noticias}">
+            ← Voltar para o painel
+        </a>
+
+
+        <!-- CABEÇALHO -->
+
+        <header class="admin-form-header">
+
+            <span class="eyebrow">
+                Área administrativa
+            </span>
+
+            <h1 th:text="${noticia.id == null} ? 'Nova notícia' : 'Editar notícia'">
+                Nova notícia
+            </h1>
+
+            <p th:text="${noticia.id == null}
+                ? 'Publique uma nova notícia do Grupo Teatral Cerne.'
+                : 'Atualize as informações e os arquivos desta notícia.'">
+                Publique uma nova notícia do Grupo Teatral Cerne.
+            </p>
+
+        </header>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form class="news-form"
+              th:action="${noticia.id == null} ? @{/admin/noticias} : @{/admin/noticias/{id}(id=${noticia.id})}"
+              th:object="${noticia}"
+              method="post"
+              enctype="multipart/form-data">
+
+
+            <!-- =================================================
+                 INFORMAÇÕES DA NOTÍCIA
+                 ================================================= -->
+
+            <section class="form-section">
+
+                <div class="form-section-heading">
+
+                    <span class="form-section-number">
+                        01
+                    </span>
+
+                    <div>
+                        <h2>Informações</h2>
+
+                        <p>
+                            Defina o título e o conteúdo da publicação.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- TÍTULO -->
+
+                <div class="form-field">
+
+                    <label for="titulo">
+                        Título
+                    </label>
+
+                    <input
+                            type="text"
+                            id="titulo"
+                            th:field="*{titulo}"
+                            placeholder="Título da notícia"
+                            autocomplete="off"
+                    >
+
+                    <p class="form-error"
+                       th:if="${#fields.hasErrors('titulo')}"
+                       th:errors="*{titulo}">
+                        Erro no título.
+                    </p>
+
+                </div>
+
+
+                <!-- CONTEÚDO -->
+
+                <div class="form-field">
+
+                    <label for="conteudo">
+                        Conteúdo
+                    </label>
+
+                    <textarea
+                            id="conteudo"
+                            th:field="*{conteudo}"
+                            rows="14"
+                            placeholder="Escreva o conteúdo da notícia..."
+                    ></textarea>
+
+                    <p class="field-help">
+                        As quebras de linha inseridas aqui serão preservadas na publicação.
+                    </p>
+
+                    <p class="form-error"
+                       th:if="${#fields.hasErrors('conteudo')}"
+                       th:errors="*{conteudo}">
+                        Erro no conteúdo.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MÍDIA
+                 ================================================= -->
+
+            <section class="form-section">
+
+                <div class="form-section-heading">
+
+                    <span class="form-section-number">
+                        02
+                    </span>
+
+                    <div>
+                        <h2>Imagens</h2>
+
+                        <p>
+                            Gerencie as imagens desta notícia.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- IMAGENS EXISTENTES -->
+
+                <div th:if="${!#lists.isEmpty(noticia.imagens)}"
+                     class="current-media">
+
+                    <div class="current-media-heading">
+                        <strong>Imagens atuais</strong>
+
+                        <span>
+                            Selecione as que deseja remover.
+                        </span>
+                    </div>
+
+
+                    <div class="current-images">
+
+                        <div class="current-image"
+                             th:each="img : ${noticia.imagens}">
+
+                            <div class="current-image-preview">
+
+                                <img
+                                        th:src="@{/uploads/{arquivo}(arquivo=${img.arquivo})}"
+                                        alt="Imagem da notícia"
+                                >
+
+                            </div>
+
+                            <label class="remove-media">
+
+                                <input
+                                        type="checkbox"
+                                        name="removerImagens"
+                                        th:value="${img.id}"
+                                >
+
+                                <span>
+                                    Remover imagem
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOVAS IMAGENS -->
+
+                <div class="form-field">
+
+                    <label for="novasImagens">
+                        <span th:text="${!#lists.isEmpty(noticia.imagens)}
+                            ? 'Adicionar novas imagens'
+                            : 'Adicionar imagens'">
+                            Adicionar imagens
+                        </span>
+                    </label>
+
+                    <div class="file-input-wrapper">
+
+                        <input
+                                type="file"
+                                id="novasImagens"
+                                name="novasImagens"
+                                multiple
+                                accept="image/jpeg,image/png,image/webp,image/gif"
+                        >
+
+                        <label for="novasImagens"
+                               class="file-input-label">
+
+                            <span class="file-input-icon">
+                                +
+                            </span>
+
+                            <span class="file-input-text">
+
+                                <strong>
+                                    Selecionar imagens
+                                </strong>
+
+                                <small>
+                                    JPG, PNG, WEBP ou GIF · Você pode selecionar várias
+                                </small>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 VÍDEO
+                 ================================================= -->
+
+            <section class="form-section">
+
+                <div class="form-section-heading">
+
+                    <span class="form-section-number">
+                        03
+                    </span>
+
+                    <div>
+                        <h2>Vídeo</h2>
+
+                        <p>
+                            Adicione ou substitua o vídeo da notícia.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- VÍDEO ATUAL -->
+
+                <div th:if="${noticia.video != null}"
+                     class="current-video">
+
+                    <div class="current-media-heading">
+
+                        <strong>
+                            Vídeo atual
+                        </strong>
+
+                        <span>
+                            Este vídeo já está associado à notícia.
+                        </span>
+
+                    </div>
+
+                    <video
+                            th:src="@{/uploads/{arquivo}(arquivo=${noticia.video})}"
+                            controls>
+                    </video>
+
+
+                    <label class="remove-media">
+
+                        <input
+                                type="checkbox"
+                                name="removerVideo"
+                                value="true"
+                        >
+
+                        <span>
+                            Remover vídeo atual
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- NOVO VÍDEO -->
+
+                <div class="form-field">
+
+                    <label for="novoVideo"
+                           th:text="${noticia.video != null}
+                               ? 'Trocar vídeo'
+                               : 'Adicionar vídeo (opcional)'">
+                        Adicionar vídeo
+                    </label>
+
+                    <div class="file-input-wrapper">
+
+                        <input
+                                type="file"
+                                id="novoVideo"
+                                name="novoVideo"
+                                accept="video/mp4,video/webm"
+                        >
+
+                        <label for="novoVideo"
+                               class="file-input-label">
+
+                            <span class="file-input-icon">
+                                +
+                            </span>
+
+                            <span class="file-input-text">
+
+                                <strong>
+                                    Selecionar vídeo
+                                </strong>
+
+                                <small>
+                                    MP4 ou WEBM · Opcional
+                                </small>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ERROS GLOBAIS -->
+
+            <div class="form-global-errors"
+                 th:if="${#fields.globalErrors().size() > 0}">
+
+                <p th:each="erro : ${#fields.globalErrors()}"
+                   th:text="${erro}">
+                    Erro no formulário.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 AÇÕES
+                 ================================================= -->
+
+            <div class="news-form-actions">
+
+                <a class="form-cancel"
+                   th:href="@{/admin/noticias}">
+                    Cancelar
+                </a>
+
+                <button
+                        type="submit"
+                        class="form-submit"
+                        th:text="${noticia.id == null}
+                            ? 'Publicar notícia'
+                            : 'Salvar alterações'">
+                    Publicar notícia
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div>
+            <strong>Grupo Teatral Cerne</strong>
+            <span>Teatro &amp; Cultura</span>
+        </div>
+
+        <p>
+            Área administrativa
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

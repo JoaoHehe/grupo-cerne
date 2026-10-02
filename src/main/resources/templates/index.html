@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Grupo Teatral Cerne | Notícias</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a class="brand" th:href="@{/}">
+
+            <img
+                    th:src="@{/css/img/logoCerne.png}"
+                    alt="Grupo Teatral Cerne"
+            >
+
+            <span class="brand-text">
+                <strong>Grupo Teatral Cerne</strong>
+                <span>Teatro &amp; Cultura</span>
+            </span>
+
+        </a>
+
+
+        <nav class="main-nav" aria-label="Navegação principal">
+
+            <a
+                    th:href="@{/}"
+                    class="active"
+            >
+                Notícias
+            </a>
+
+            <a th:href="@{/login}">
+                Área restrita
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <!-- INTRODUÇÃO -->
+
+    <section class="hero">
+
+        <div class="hero-inner">
+
+            <span class="eyebrow">
+                Grupo Teatral Cerne
+            </span>
+
+            <h1>
+                Notícias
+            </h1>
+
+            <p>
+                Acompanhe as atividades, apresentações, projetos
+                e acontecimentos do Grupo Teatral Cerne.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- NOTÍCIAS -->
+
+    <section class="news-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    Grupo Teatral Cerne
+                </span>
+
+                <h2>
+                    Notícias recentes
+                </h2>
+
+            </div>
+
+            <p>
+                Informações sobre o grupo, seus trabalhos,
+                apresentações e atividades.
+            </p>
+
+        </div>
+
+
+        <!-- NENHUMA NOTÍCIA -->
+
+        <div
+                th:if="${#lists.isEmpty(noticias)}"
+                class="empty-state"
+        >
+            Nenhuma notícia publicada ainda.
+        </div>
+
+
+        <!-- NOTÍCIAS -->
+
+        <div
+                th:unless="${#lists.isEmpty(noticias)}"
+                class="news-grid"
+        >
+
+            <article
+                    class="news-card"
+                    th:each="n : ${noticias}"
+            >
+
+                <a
+                        th:href="@{/noticia/{id}(id=${n.id})}"
+                        class="news-image-link"
+                >
+
+                    <img
+                            th:if="${!#lists.isEmpty(n.imagens)}"
+                            class="news-image"
+                            th:src="@{/uploads/{arquivo}(arquivo=${n.imagens[0].arquivo})}"
+                            th:alt="${n.titulo}"
+                    >
+
+                    <div
+                            th:unless="${!#lists.isEmpty(n.imagens)}"
+                            class="news-image-placeholder"
+                            aria-hidden="true"
+                    >
+                        Grupo Cerne
+                    </div>
+
+                </a>
+
+
+                <div class="news-content">
+
+                    <time
+                            class="news-date"
+                            th:text="${#temporals.format(n.dataPublicacao, 'dd/MM/yyyy HH:mm')}"
+                    >
+                        data
+                    </time>
+
+                    <h3>
+
+                        <a
+                                th:href="@{/noticia/{id}(id=${n.id})}"
+                                th:text="${n.titulo}"
+                        >
+                            Título
+                        </a>
+
+                    </h3>
+
+                    <p th:text="${n.conteudo}">
+                        Conteúdo
+                    </p>
+
+                    <a
+                            class="read-more"
+                            th:href="@{/noticia/{id}(id=${n.id})}"
+                    >
+                        Ler notícia
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <a
+                class="restricted-link"
+                th:href="@{/login}"
+        >
+            Acessar área administrativa
+        </a>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div>
+
+            <strong>
+                Grupo Teatral Cerne
+            </strong>
+
+            <span>
+                Teatro &amp; Cultura
+            </span>
+
+        </div>
+
+        <p>
+            © Grupo Cerne — Todos os direitos reservados.
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

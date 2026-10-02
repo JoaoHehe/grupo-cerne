@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title th:text="${noticia.titulo}">
+        Notícia | Grupo Teatral Cerne
+    </title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+    >
+
+</head>
+
+
+<body class="news-page">
+
+
+<!-- =====================================================
+     CABEÇALHO
+     ===================================================== -->
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a
+                class="brand"
+                th:href="@{/}"
+        >
+
+            <img
+                    th:src="@{/css/img/logoCerne.png}"
+                    alt="Grupo Teatral Cerne"
+            >
+
+            <span class="brand-text">
+
+                <strong>
+                    Grupo Teatral Cerne
+                </strong>
+
+                <span>
+                    Teatro &amp; Cultura
+                </span>
+
+            </span>
+
+        </a>
+
+
+        <nav
+                class="main-nav"
+                aria-label="Navegação principal"
+        >
+
+            <a th:href="@{/}">
+                Notícias
+            </a>
+
+            <a th:href="@{/login}">
+                Área restrita
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     NOTÍCIA
+     ===================================================== -->
+
+<main class="news-detail">
+
+    <div class="news-detail-inner">
+
+
+        <!-- VOLTAR -->
+
+        <a
+                class="news-back"
+                th:href="@{/}"
+        >
+            ← Voltar para as notícias
+        </a>
+
+
+        <!-- CABEÇALHO DA NOTÍCIA -->
+
+        <header class="news-detail-header">
+
+            <span class="eyebrow">
+                Grupo Teatral Cerne
+            </span>
+
+
+            <h1
+                    th:text="${noticia.titulo}"
+            >
+                Título da notícia
+            </h1>
+
+
+            <div class="news-detail-meta">
+
+                <span>
+                    Publicado em
+                </span>
+
+                <time
+                        th:text="${#temporals.format(noticia.dataPublicacao, 'dd/MM/yyyy HH:mm')}"
+                >
+                    01/10/2026 12:00
+                </time>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             GALERIA DE IMAGENS
+             ================================================= -->
+
+        <div
+                class="news-gallery"
+                th:if="${noticia.imagens != null and !noticia.imagens.isEmpty()}"
+        >
+
+            <figure
+                    class="news-gallery-item"
+                    th:each="img : ${noticia.imagens}"
+            >
+
+                <img
+                        th:src="@{/uploads/{arquivo}(arquivo=${img.arquivo})}"
+                        th:alt="${noticia.titulo}"
+                >
+
+            </figure>
+
+        </div>
+
+
+
+        <!-- =================================================
+             VÍDEO
+             ================================================= -->
+
+        <div
+                class="news-video"
+                th:if="${noticia.video != null}"
+        >
+
+            <video
+                    th:src="@{/uploads/{arquivo}(arquivo=${noticia.video})}"
+                    controls
+            ></video>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CONTEÚDO
+             ================================================= -->
+
+        <article class="news-detail-content">
+
+            <p
+                    th:text="${noticia.conteudo}"
+            >
+                Conteúdo da notícia
+            </p>
+
+        </article>
+
+
+
+        <!-- =================================================
+             FINAL
+             ================================================= -->
+
+        <div class="news-detail-footer">
+
+            <span>
+                Grupo Teatral Cerne
+            </span>
+
+            <a
+                    th:href="@{/}"
+            >
+                Ver outras notícias →
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div>
+
+            <strong>
+                Grupo Teatral Cerne
+            </strong>
+
+            <span>
+                Teatro &amp; Cultura
+            </span>
+
+        </div>
+
+
+        <p>
+            © Grupo Cerne — Todos os direitos reservados.
+        </p>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

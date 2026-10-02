@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel | Grupo Teatral Cerne</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="admin-page">
+
+<header class="site-header">
+    <div class="header-inner">
+
+        <a class="brand" th:href="@{/}">
+            <img th:src="@{/css/img/logoCerne.png}"
+                 alt="Grupo Teatral Cerne">
+
+            <span class="brand-text">
+                <strong>Grupo Teatral Cerne</strong>
+                <span>Teatro &amp; Cultura</span>
+            </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navegação principal">
+            <a th:href="@{/}">
+                Ver site
+            </a>
+
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit">Sair</button>
+            </form>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="admin-main">
+
+    <div class="admin-container">
+
+        <!-- CABEÇALHO -->
+
+        <header class="admin-header">
+
+            <div>
+                <span class="eyebrow">
+                    Área administrativa
+                </span>
+
+                <h1>
+                    Painel de notícias
+                </h1>
+
+                <p>
+                    Gerencie as notícias publicadas pelo Grupo Teatral Cerne.
+                </p>
+            </div>
+
+            <a class="admin-new-button"
+               th:href="@{/admin/noticias/nova}">
+                <span>+</span>
+                Nova notícia
+            </a>
+
+        </header>
+
+
+        <!-- LISTA VAZIA -->
+
+        <div th:if="${#lists.isEmpty(noticias)}"
+             class="admin-empty">
+
+            <span class="admin-empty-mark">+</span>
+
+            <h2>
+                Nenhuma notícia cadastrada
+            </h2>
+
+            <p>
+                Comece criando a primeira notícia do Grupo Teatral Cerne.
+            </p>
+
+            <a class="admin-new-button"
+               th:href="@{/admin/noticias/nova}">
+                Criar primeira notícia
+            </a>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <section th:unless="${#lists.isEmpty(noticias)}"
+                 class="admin-news-list">
+
+            <div class="admin-list-header">
+
+                <div>
+                    <span class="eyebrow">
+                        Publicações
+                    </span>
+
+                    <h2>
+                        Notícias cadastradas
+                    </h2>
+                </div>
+
+                <span class="admin-count"
+                      th:text="${#lists.size(noticias) + ' notícia(s)'}">
+                    0 notícias
+                </span>
+
+            </div>
+
+
+            <div class="admin-table-wrapper">
+
+                <table class="admin-table">
+
+                    <thead>
+                    <tr>
+                        <th>Notícia</th>
+                        <th>Data</th>
+                        <th>Autor</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="n : ${noticias}">
+
+                        <!-- TÍTULO -->
+
+                        <td class="admin-news-title">
+
+                            <a th:href="@{/noticia/{id}(id=${n.id})}"
+                               th:text="${n.titulo}">
+                                Título da notícia
+                            </a>
+
+                        </td>
+
+
+                        <!-- DATA -->
+
+                        <td class="admin-news-date"
+                            th:text="${#temporals.format(n.dataPublicacao, 'dd/MM/yyyy HH:mm')}">
+                            01/10/2026 12:00
+                        </td>
+
+
+                        <!-- AUTOR -->
+
+                        <td class="admin-news-author"
+                            th:text="${n.autor != null ? n.autor.nome : '-'}">
+                            Autor
+                        </td>
+
+
+                        <!-- AÇÕES -->
+
+                        <td class="admin-actions">
+
+                            <a class="admin-edit"
+                               th:href="@{/admin/noticias/{id}/editar(id=${n.id})}">
+                                Editar
+                            </a>
+
+
+                            <!-- Apagar continua sendo POST -->
+
+                            <form th:action="@{/admin/noticias/{id}/apagar(id=${n.id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Apagar esta notícia?')">
+
+                                <button class="admin-delete"
+                                        type="submit">
+                                    Apagar
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div>
+            <strong>Grupo Teatral Cerne</strong>
+            <span>Teatro &amp; Cultura</span>
+        </div>
+
+        <p>
+            Área administrativa
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>
